@@ -1,5 +1,9 @@
 package com.company.jmixpm.screen.main;
 
+import io.jmix.search.searching.SearchResult;
+import io.jmix.searchui.component.SearchField;
+import io.jmix.searchui.screen.result.SearchResultsScreen;
+import io.jmix.ui.ScreenBuilders;
 import io.jmix.ui.ScreenTools;
 import io.jmix.ui.component.AppWorkArea;
 import io.jmix.ui.component.Button;
@@ -7,11 +11,7 @@ import io.jmix.ui.component.Window;
 import io.jmix.ui.component.mainwindow.Drawer;
 import io.jmix.ui.icon.JmixIcon;
 import io.jmix.ui.navigation.Route;
-import io.jmix.ui.screen.Screen;
-import io.jmix.ui.screen.Subscribe;
-import io.jmix.ui.screen.UiController;
-import io.jmix.ui.screen.UiControllerUtils;
-import io.jmix.ui.screen.UiDescriptor;
+import io.jmix.ui.screen.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @UiController("MainScreen")
@@ -28,7 +28,8 @@ public class MainScreen extends Screen implements Window.HasWorkArea {
     private Drawer drawer;
     @Autowired
     private Button collapseDrawerButton;
-
+    @Autowired
+    private ScreenBuilders screenBuilders;
 
     @Override
     public AppWorkArea getWorkArea() {
@@ -51,5 +52,16 @@ public class MainScreen extends Screen implements Window.HasWorkArea {
                 UiControllerUtils.getScreenContext(this).getScreens());
 
         screenTools.handleRedirect();
+    }
+
+    @Install(to = "searchField", subject = "searchCompletedHandler")
+    private void searchFieldSearchCompletedHandler(SearchField.SearchCompletedEvent searchCompletedEvent) {
+        SearchResult searchResult = searchCompletedEvent.getSearchResult();
+        screenBuilders.screen(this)
+                .withScreenClass(SearchResultsScreen.class)
+                .withOpenMode(OpenMode.DIALOG)
+                .build()
+                .setSearchResult(searchResult)
+                .show();
     }
 }

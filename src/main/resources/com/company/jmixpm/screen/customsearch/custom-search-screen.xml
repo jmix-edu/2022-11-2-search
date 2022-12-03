@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://customSearchScreen.caption">
+    <data>
+        <collection id="searchResultItemsDc"
+                    class="com.company.jmixpm.entity.SearchResultItem"/>
+    </data>
+    <layout expand="searchResultItemsTable" spacing="true">
+        <textField id="searchField"/>
+        <table id="searchResultItemsTable"
+               width="100%"
+               dataContainer="searchResultItemsDc">
+            <columns>
+                <column id="entityName"/>
+                <column id="instanceName"/>
+                <column id="instanceId"/>
+                <column id="fields"/>
+            </columns>
+        </table>
+    </layout>
+</window>
